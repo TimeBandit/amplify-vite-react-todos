@@ -71,3 +71,7 @@ a {
 .item_content {
   flex-grow: 999;
 }
+
+.item_content:has(+ .item_checkbox:checked) {
+  text-decoration: line-through;
+}
