@@ -16,11 +16,24 @@ function App() {
   }, []);
 
   function createTodo() {
-    client.models.Todo.create({ content: window.prompt("Todo content") });
+    client.models.Todo.create({
+      content: window.prompt("Todo content"),
+      isDone: false,
+    });
   }
 
   function deleteTodo(id: string) {
     client.models.Todo.delete({ id });
+  }
+
+  function updateTodo(e: React.MouseEvent<HTMLInputElement>) {
+    e.stopPropagation();
+    const id = e.currentTarget.id;
+
+    client.models.Todo.update({
+      id,
+      isDone: e.currentTarget.checked,
+    });
   }
 
   return (
@@ -29,9 +42,18 @@ function App() {
       <button onClick={createTodo}>+ new</button>
       <ul>
         {todos.map((todo) => (
-          <li onClick={() => deleteTodo(todo.id)} key={todo.id}>
-            {todo.content}
-          </li>
+          <div className="item" key={todo.id}>
+            <li className="item_content" onClick={() => deleteTodo(todo.id)}>
+              {todo.content}
+            </li>
+            <input
+              className="item_checkbox"
+              onClick={(e) => updateTodo(e)}
+              type="checkbox"
+              name=""
+              id={todo.id}
+            />
+          </div>
         ))}
       </ul>
       <div>
